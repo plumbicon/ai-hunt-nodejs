@@ -1,13 +1,24 @@
 const userService = require('../../services/userService');
 
 /**
- * Gets a list of all users. Admin only.
- * GET /api/users
+ * Gets a paginated list of all users. Admin only.
+ * GET /api/users?page=<page_number>&limit=<items_per_page>
  */
 const getAllUsers = async (req, res) => {
   try {
-    const users = await userService.getAll();
-    res.status(200).json(users);
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+
+    const { count, rows } = await userService.getAll({ page, limit });
+
+    const totalPages = Math.ceil(count / limit);
+
+    res.status(200).json({
+      totalItems: count,
+      totalPages,
+      currentPage: page,
+      users: rows,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error while fetching users.' });

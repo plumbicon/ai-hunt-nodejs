@@ -108,11 +108,35 @@ Getting `accessToken`.
 - `500 Internal Server Error` - An unexpected error occurred on the server.
 
 ### 5. Get User List
-`accessToken` of a user with the `admin` role is required.
+`accessToken` of a user with the `admin` role is required. Supports pagination.
 
-**GET** `/api/users`
+**GET** `/api/users?page=1&limit=10`
 **Headers:**
 `Authorization: Bearer <accessToken>`
+**Query Parameters (Optional):**
+- `page` (number): The page number to retrieve. Default: `1`.
+- `limit` (number): The number of users per page. Default: `10`.
+
+**Response (Example):**
+```json
+{
+  "totalItems": 50,
+  "totalPages": 5,
+  "currentPage": 1,
+  "users": [
+    {
+      "id": "...",
+      "fullName": "...",
+      "birthDate": "...",
+      "email": "...",
+      "role": "...",
+      "isBlocked": false,
+      "createdAt": "...",
+      "updatedAt": "..."
+    }
+  ]
+}
+```
 
 **Possible Errors:**
 - `401 Unauthorized` - `accessToken` is missing.

@@ -1,12 +1,19 @@
 const db = require("../models");
 
 /**
- * Retrieves all users.
- * @returns {Promise<Array<object>>} A list of all users.
+ * Retrieves a paginated list of users.
+ * @param {object} pagination - Pagination options.
+ * @param {number} pagination.page - The current page.
+ * @param {number} pagination.limit - The number of items per page.
+ * @returns {Promise<object>} An object containing the list of users and the total count.
  */
-const getAll = async () => {
-  const users = await db.User.findAll({
+const getAll = async ({ page, limit }) => {
+  const offset = (page - 1) * limit;
+  const users = await db.User.findAndCountAll({
     attributes: { exclude: ["password"] }, // Exclude password field
+    limit,
+    offset,
+    order: [['createdAt', 'DESC']] // Optional: to keep the order consistent
   });
   return users;
 };
