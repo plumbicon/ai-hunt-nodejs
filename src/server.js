@@ -4,7 +4,7 @@ const db = require("./models");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 6000;
 
 const createAdminIfNotExists = async () => {
   const adminEmail = "admin@example.com";

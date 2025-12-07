@@ -25,13 +25,13 @@ A RESTful service for user management.
     > Also add/check the `CREATE_ADMIN` variable:
     > - `CREATE_ADMIN=true` — when the server starts (if there is no admin account), an administrator account will be created and a temporary password will be displayed in the console. For production, it is recommended to leave `CREATE_ADMIN=false` and create an admin manually.
     >
-    > Required variables: `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `JWT_ACCESS_SECRET`, `PORT` (default 5000).
+    > Required variables: `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `JWT_ACCESS_SECRET`, `PORT` (default 6000).
 
 3.  **Run the project using Docker Compose:**
     ```bash
     docker-compose up --build
     ```
-The server will be available at http://localhost:${PORT}, where `PORT` is the value specified in your `.env` file (default 5000).
+The server will be available at http://localhost:${PORT}, where `PORT` is the value specified in your `.env` file (default 6000).
 
 ---
 
