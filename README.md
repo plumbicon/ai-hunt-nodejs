@@ -11,7 +11,7 @@ A RESTful service for user management.
 ## How to Run
 1.  **Clone the repository:**
     ```bash
-    git clone <repository_url>
+    git clone https://github.com/plumbicon/ai-hunt-nodejs
     cd user-service
     ```
 
