@@ -35,6 +35,64 @@ The server will be available at http://localhost:${PORT}, where `PORT` is the va
 
 ---
 
+## Testing
+
+The project is configured with a comprehensive test suite using [Jest](https://jestjs.io/) and [Supertest](https://github.com/visionmedia/supertest). The tests run against a separate, temporary PostgreSQL database to ensure a clean environment and prevent interference with development data.
+
+### Setup
+
+Before running the tests, you need to configure the environment variables for the test database. The test runner uses the same `.env` file but requires specific values to connect to the database instance managed by Docker Compose.
+
+1.  **Ensure your `.env` file is present.** If not, copy it from `.env.example`.
+2.  **Configure the test connection variables.** The most important part is the port. Your application connects to the database *within* the Docker network on port `5432`, but tests run from your host machine must connect to the *exposed* port.
+
+    Make sure your `.env` file contains these values. The `DB_PORT` variable defines the port exposed on your host machine for running tests.
+
+    ```env
+    DB_HOST=localhost
+    DB_PORT=5433      # Exposed host port for tests. Defaults to 5433 if not set.
+    DB_NAME_TEST=test_app_db
+    DB_USER=myuser
+    DB_PASSWORD=mypassword
+    ```
+
+### Running Tests
+
+First, ensure your Docker containers are running:
+```bash
+docker-compose up -d
+```
+
+Then, run the entire test suite with the following command:
+
+```bash
+npm test
+```
+
+The test script will automatically:
+1.  Create the temporary test database (`test_app_db`).
+2.  Apply all migrations to set up the schema.
+3.  Run all tests.
+4.  Roll back the migrations.
+5.  Drop the temporary test database.
+
+### What is Tested?
+
+The test suite covers all API endpoints, including:
+
+-   **Authentication (`/api/auth`)**:
+    -   Successful user registration.
+    -   Preventing registration with a duplicate email.
+    -   Successful login with correct credentials.
+    -   Failed login with incorrect password or non-existent user.
+-   **User Management (`/api/users`)**:
+    -   **Authorization**: Verifies that access rules for different user roles (`admin` vs. `user`) are enforced correctly.
+    -   **Get All Users**: Checks that only admins can retrieve the full user list.
+    -   **Get User by ID**: Checks that users can view their own profile and that admins can view any profile.
+    -   **Block User**: Verifies the block logic and, crucially, confirms that a blocked user can no longer log in.
+
+---
+
 ## API Endpoints
 
 ### 1. Registration
